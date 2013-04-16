@@ -17,8 +17,6 @@ default_style = <<-HTML
     .disclaimer { color: red; }
     #menu.affix { top: 20px; }
     a.anchor { margin-top: 20px; }
-    //p, span { text-align: left !important; }
-    //.center-image { text-align: center !important; }
   </style>
   HTML
 
@@ -26,15 +24,11 @@ doc = Nokogiri::HTML(open("#{url}/pub"), nil, 'UTF-8')
 
 # We want the second <style> block
 style = doc.xpath("//style")[1]
+style.content = style.content.gsub(/\.title{[^}]*}/, "")
+style.content = style.content.gsub(/h1{[^}]*}/, "")
 
-# Fix images
+# Fix images, the src is relative in the doc, but shouldn't
 doc.css("img").each do |img|
-  # # The parent is centered
-  # parent = img.parent
-  # parent['class'] ||= ""
-  # parent['class'] = parent['class'] << " center-image"
-
-  # The src was relative
   unless img.attributes["src"].nil?
     img.attributes["src"].value = "#{url}/#{img.attributes["src"].value}"
   end
