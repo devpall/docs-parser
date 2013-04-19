@@ -3,6 +3,9 @@ require "open-uri"
 require "nokogiri"
 require "cgi"
 
+# TODO: Change anchors in the index to use texts such as "guia-rapido-de-uso"
+# TODO: Try to make the index float at the left
+
 output = "out.html"
 url = "https://docs.google.com/document/d/1fUye_omrE5jgMnljL9ZuvK-BJUhyRM6dCQ8KTtunC70"
 
@@ -24,8 +27,10 @@ doc = Nokogiri::HTML(open("#{url}/pub"), nil, 'UTF-8')
 
 # We want the second <style> block
 style = doc.xpath("//style")[1]
-style.content = style.content.gsub(/\.title{[^}]*}/, "")
-style.content = style.content.gsub(/h1{[^}]*}/, "")
+unless style.nil?
+  style.content = style.content.gsub(/\.title{[^}]*}/, "")
+  style.content = style.content.gsub(/h1{[^}]*}/, "")
+end
 
 # Fix images, the src is relative in the doc, but shouldn't
 doc.css("img").each do |img|
