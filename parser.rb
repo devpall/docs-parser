@@ -6,8 +6,30 @@ require "cgi"
 # TODO: Change anchors in the index to use texts such as "guia-rapido-de-uso"
 # TODO: Try to make the index float at the left
 
+# Call script with:
+# * ruby parser.rb rnp
+# * ruby parser.rb ufrgs
+
+if ARGV and ARGV[0]
+  if ARGV[0] == "ufrgs"
+    type = "ufrgs"
+  elsif ARGV[0] == "rnp"
+    type = "rnp"
+  else
+    type = "ufrgs"
+  end
+else
+  type = "ufrgs"
+end
+
+puts "Docs for #{type}..."
+
 output = "out.html"
-url = "https://docs.google.com/document/d/1fUye_omrE5jgMnljL9ZuvK-BJUhyRM6dCQ8KTtunC70"
+if type == "ufrgs"
+  url = "https://docs.google.com/document/d/1fUye_omrE5jgMnljL9ZuvK-BJUhyRM6dCQ8KTtunC70"
+else # rnp
+  url = "https://docs.google.com/document/d/18ECQVc73ItVJ_VAR0_ki8mG4b3BYFM3onEcaOMwkUWE"
+end
 
 default_style = <<-HTML
   <style type="text/css">
